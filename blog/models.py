@@ -1,6 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
+
+
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='published')
 
 
 class Article(models.Model):
@@ -28,12 +34,20 @@ class Article(models.Model):
     # Поле для отображения состояния статьи (опубликовано/черновик)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
 
+
+
     # Метаданные
     class Meta:
         # Порядок сортировки - по убыванию даты публикации
         ordering = ('-publish',)
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
+
+    objects = models.Manager()
+    published = PublishedManager()
+
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.url])
 
     # Метод, отвечающий за отображение объекта в человекочитаемом формате
     def __str__(self):
