@@ -2,6 +2,6 @@
 {% block title %}{{ article.title }}{% endblock %}
 {% block content %}
     <h1>{{ article.title}}</h1>
-    <p class="date"> Published {{ article.publish}} by {{ article.author }}</p>
+    <p class="date">{{ article.author }} опубликовал {{ article.publish }}  </p>
     {{ article.body|safe|linebreaks }}
 {% endblock %}

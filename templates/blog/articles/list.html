@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+{% block title %}Название Блога{% endblock %}
+{% block content %}
+<h1>Мой блог</h1>
+{% for article in articles %}
+    <h2>
+        <a href="{{article.get_absolute_url}}">{{ article.title }}</a>
+    </h2>
+    {% if article.banner == "" %}
+        <img src="/media/blog_banners/default_blog.jpg">
+    {% else %}
+        <img src="{{ article.banner.url }}">
+    {% endif%}
+
+    <p class="date">{{ article.author }} опубликовал {{ article.publish }}  </p>
+    {{ article.body|safe|truncatewords:30|linebreaks }}
+{% endfor %}
+{% include "pagination.html" with page=articles %}
+{% endblock %}
